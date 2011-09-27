@@ -29,16 +29,14 @@ To style it using photoJS we would include jQuery, then do something like this:
 	
 or, in CoffeeScript:
 
-	<script type="text/coffeescript">
 	$ ->
 		$( '#portfolio' ).pJS
 			api: 'picasa'
 			columns: 4
 			id: '5629373182085820817'
 			user: 'samwhitedphotography'
-	</script>
 
-nice and easy. But that's not all photoJS can do.
+Nice and easy --- but that's not all photoJS can do.
 
 # Settings
 There are a lot of different ways you can configure photoJS, below is the default settings object, and some explanation where necessary:
