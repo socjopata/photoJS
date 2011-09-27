@@ -60,8 +60,8 @@ There are a lot of different ways you can configure photoJS, below is the defaul
 			rowClass: '',		// A list of classes to add to the row divs
 			imgClass: '',		// A list of classes to add to the img tags
 			aClass: ''			// A list of classes to add to the anchors
-		}
-	'complete': complete		// A callback function to be executed when everything is done.
+		},
+		'complete': complete	// A callback function to be executed when everything is done.
 								// By default, it is set to the second argument passed to the
 								// function call. The settings object takes priority.
 	}
