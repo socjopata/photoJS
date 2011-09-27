@@ -6,6 +6,8 @@ Unlike many image gallery plugins, photoJS is very minimal. It simply downloads 
 After that, it is up to you to use another plugin such as [jQuery lightBox](http://leandrovieira.com/projects/jquery/lightbox/)
 or something from [jQuery UI](http://jqueryui.com/) to style, provide transitions, etc.
 
+To see a live demo of photoJS, check out the site it was built for, [SamWhited.com](https://samwhited.com/photography/).
+
 # Using pJS
 Using photoJS is as easy as calling `$( selector ).pJS( settings[, complete] )`. However, this won't do much (read, "anything").
 To make photoJS really shine, we need to include some settings.
@@ -36,7 +38,7 @@ or, in CoffeeScript:
 			id: '5629373182085820817'
 			user: 'samwhitedphotography'
 
-Nice and easy --- but that's not all photoJS can do.
+Nice and easy -- but that's not all photoJS can do.
 
 # Settings
 There are a lot of different ways you can configure photoJS, below is the default settings object, and some explanation where necessary:
