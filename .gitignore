@@ -1,0 +1,13 @@
+tests
+.project
+*~
+*.diff
+*.patch
+.DS_Store
+.settings
+_*
+*.ini
+*.db
+*.info
+*.coffee
+*.pack.js
