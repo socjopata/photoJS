@@ -7,7 +7,7 @@
  *
  * https://github.com/SamWhited/photoJS
  */
-(function( $, undefined ) {
+(function( $, root, undefined ) {
 	evalResponse = function ( json ) {
 		// Make sure the JSON is actually parsed
 		if ( typeof json === "string" ) {
@@ -258,12 +258,16 @@
 						thumbsize: data.settings['thumbmax'] + ( data.settings['cropped'] ? 'c' : 'u' )
 					},
 					success: function( response ) {
+						// Make sure everything runs smoothly
+						// in browsers like Firefox.
+						if ( root.apiResponse === undefined ) {
+							eval(response); // TODO: This is a terrible hack. Find a better way.
+						}
 						var feed = apiResponse.feed;
 						data.api = {
 							query: apiString,
 							response: response
 						};
-						// data.api = $.extend( data.api, { query: apiString });
 						data.album.author = feed.author[0].name.$t;
 						data.album.icon = feed.icon.$t;
 						data.album.title = feed.title.$t;
@@ -296,4 +300,4 @@
 			$.error( 'Method ' + method + ' does not exist on jQuery.pJS' );
 		}
 	};
-})( jQuery );
+})( jQuery, this );
