@@ -246,35 +246,7 @@
 						+ data.settings['user']
 						+ '/albumid/'
 						+ data.settings['id']
-						+ '?'; /*
-						+ 'alt=json-in-script&callback=evalResponse&kind=photo&imgmax='
-						+ data.settings['imgmax']
-						+ "&thumbsize="
-						+ data.settings['thumbmax'] + (data.settings['cropped'] ? 'c' : 'u');	
-				$.getScript(apiString, function( response ) {
-					var feed = apiResponse.feed;
-					data.api = {
-						query: apiString,
-						response: apiResponse
-					};
-					// data.api = $.extend( data.api, { query: apiString });
-					data.album.author = feed.author[0].name.$t;
-					data.album.icon = feed.icon.$t;
-					data.album.title = feed.title.$t;
-					data.album.subtitle = feed.subtitle.$t;
-					data.album.updated = new Date( feed.updated.$t );
-					$.each( feed.entry, function( index, value ) {
-						data.album.images.push({
-							'src': value.content.src,
-							'type': value.content.type,
-							'title': value.title.$t,
-							'updated': new Date( value.updated.$t ),
-							'published': value.published.$t,
-							'thumbnail': value.media$group.media$thumbnail[0].url
-						});
-					});
-				});*/
-
+						+ '?';
 				$.ajax({
 					url: apiString,
 					datatype: 'script',
