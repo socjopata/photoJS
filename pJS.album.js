@@ -1,5 +1,5 @@
 ﻿/*
- * jQuery photoJS Album 0.1
+ * jQuery photoJS Album 0.2
  *
  * Copyright 2011 Sam Whited (https://samwhited.com)
  * Licensed under the Creative Commons Attribution 3.0 Unported license (CC BY 3.0)
