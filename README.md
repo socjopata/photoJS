@@ -63,7 +63,8 @@ There are a lot of different ways you can configure photoJS, below is the defaul
 			imgClass: '',		// A list of classes to add to the img tags
 			aClass: ''			// A list of classes to add to the anchors
 		},
-		'complete': complete	// A callback function to be executed when everything is done.
+		load: '',				// A callback to be called when all preloaded images are done loading
+		complete: complete		// A callback function to be called after the DOM is ready
 								// By default, it is set to the second argument passed to the
 								// function call. The settings object takes priority.
 	}

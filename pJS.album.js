@@ -9,7 +9,7 @@
  */
 (function( $, root, undefined ) {
 	evalResponse = function ( json ) {
-		// Make sure the JSON is actually parsed
+	// Make sure the JSON is actually parsed
 		if ( typeof json === "string" ) {
 			json = $.parseJSON( response );
 		}
@@ -22,7 +22,7 @@
 			// object with any user defined settings.
 			settings = $.extend( true, {
 				'api': 'none',			// Only supports 'picasa' or 'none' right now
-				'preload': 'both',		// 'thumbs,' 'images,' 'all,' or 'none.' Loads asynchronously.
+				'preload': 'thumbs',	// 'thumbs,' 'images,' 'all,' or 'none.' Loads asynchronously.
 				'columns': 4,			// Integer, or 'auto' to calculate based on number of photos
 				'id': '',				// The API id of the album to download
 				'user': '',				// The username to feed the API
@@ -40,7 +40,8 @@
 					'imgClass': '',
 					'aClass': ''
 				},
-				'complete': complete
+				'complete': complete,   // Callback for when pJS has added the album to $this
+				'load': ''				// Callback for when all preloaded photos are done loading
 			}, settings);
 			return this.each( function() {
 				var $this = $( this ),
@@ -83,7 +84,7 @@
 					$this.pJS( 'picasa', function( jqXHR, textStatus ) {
 						// After the API request completes, load some images
 						if ( textStatus === 'success' ) {
-							// Load any images that need to be preloaded
+							// Start loading any images that need to be preloaded
 							if ( data.settings['preload'] && typeof data.settings['preload'] === 'string' ) {
 								$this.pJS( 'load', data.settings['preload'] );
 							}
@@ -140,8 +141,8 @@
 								}
 							}
 						}
-		
-						// Put the album in the element after the DOM has loaded
+
+						// Put the album in $this after the DOM has loaded
 						$( function() {
 							$this.empty().append( albumDiv );
 							if ( typeof data.settings['complete'] === 'function' ) {
@@ -163,41 +164,63 @@
 			});
 		},
 		load: function( images ) {
+			var imgs = images;
 			return this.each( function() {
 				var $this = $( this ),
-					data = $this.data( 'pJS' );
+					data = $this.data( 'pJS' ),
+					images = imgs;
 
 				if ( images === 'thumbs' || images === 'thumbnails' ) {
 					// Load user supplied thumbnails
-					var thumbs = []
+					var thumbs = [];
 					if ( data.settings['thumbnails'].length > 0 ) {
-						thumbs = thumbs.append( data.settings['thumbnails'] );
+						thumbs = thumbs.concat( data.settings['thumbnails'] );
 					}
-					$.each( data.settings['images'], function( index, value ) {
-						if ( typeof value === 'object' ) {
+					$.each( data.settings['images'].concat( data.album['images'] ) , function( index, value ) {
+						if ( typeof value === 'object' && typeof value.thumbnail === 'string' ) {
 							thumbs.push( value.thumbnail );
 						}
 					});
-					$.pJS( 'load', thumbs );
+					$this.pJS( 'load', thumbs );
 				} else if ( images === 'images' ) {
 					// Load images
 					var images = [];
-					$.each( data.settings['images'], function( index, value ) {
+					$.each( data.settings['images'].concat( data.album['images'] ), function( index, value ) {
 						if ( typeof value === 'string' ) {
 							images.push( value );
-						} else {
+						} else if ( typeof value === 'object' && typeof value.src === 'string' ) {
 							images.push( value.src );
 						}
 					});
-					$.pJS( 'load', images );
+					$this.pJS( 'load', images );
 				} else if ( images === 'both' || images === 'all' ) {
-					// Load thumbs and images
-					$.pJS( 'load', 'thumbs' );
-					$.pJS( 'load', 'images' );
-				} else if ( images instanceof Array ) {
+					var images = [];
+					if ( data.settings['thumbnails'].length > 0 ) {
+						images = images.concat( data.settings['thumbnails'] );
+					}
+					$.each( data.settings['images'].concat( data.album['images'] ), function( index, value ) {
+						if ( typeof value === 'object' ) {
+							if ( typeof value.thumbnail === 'string' ) {
+								images.push( value.thumbnail );
+							}
+							if ( typeof value.src === 'string' ) {
+								images.push( value.src );
+							}
+						} else if ( typeof value === 'string' ) {
+							images.push( value );
+						}
+					});
+					$this.pJS( 'load', images )
+				} else if ( $.isArray( images ) ) {
 					// Load images from array
-					$( images ).each( function() {
-						$('<img />')[0].src = this;
+					var imagesLoaded = 0;
+					$.each( images, function( index, value ) {
+						var img = $( '<img/>' ).load( function() {
+							imagesLoaded++;
+							if ( imagesLoaded === images.length && typeof data.settings['load'] === 'function' ) {
+								data.settings['load'].call( $this );
+							}
+						}).attr("src", value);
 					});
 				}
 			});
