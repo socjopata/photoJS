@@ -243,7 +243,7 @@ methods =
 				complete: complete
 			return
 
-$.fn.lettering = ( method ) ->
+$.fn.pJS = ( method ) ->
 	return if methods[method]
 	then methods[ method ].apply @, Array.prototype.slice.call( arguments, 1 )
 	else if typeof method is 'object' or not method
