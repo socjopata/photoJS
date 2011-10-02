@@ -1,5 +1,5 @@
 ﻿/*
- * jQuery photoJS Album 0.2
+ * jQuery photoJS Album 0.2.x
  *
  * Copyright 2011 Sam Whited (https://samwhited.com)
  * Licensed under the Creative Commons Attribution 3.0 Unported license (CC BY 3.0)
@@ -9,9 +9,9 @@
  */
 (function( $, root, undefined ) {
 	evalResponse = function ( json ) {
-	// Make sure the JSON is actually parsed
+		// Make sure the JSON is actually parsed
 		if ( typeof json === "string" ) {
-			json = $.parseJSON( response );
+			json = $.parseJSON( json );
 		}
 		apiResponse = json;
 		return json;
@@ -22,26 +22,26 @@
 			// object with any user defined settings.
 			settings = $.extend( true, {
 				'api': 'none',			// Only supports 'picasa' or 'none' right now
-				'preload': 'thumbs',	// 'thumbs,' 'images,' 'all,' or 'none.' Loads asynchronously.
+				'preload': 'thumbs',		// 'thumbs,' 'images,' 'all,' or 'none.' Loads asynchronously.
 				'columns': 4,			// Integer, or 'auto' to calculate based on number of photos
-				'id': '',				// The API id of the album to download
-				'user': '',				// The username to feed the API
+				'id': '',			// The API id of the album to download
+				'user': '',			// The username to feed the API
 				'imgmax': '512',		// The longest edge length of the image to download
 				'thumbmax': '104',		// The longest edge of the thumbnail image
 				'cropped': true,		// True if the thumbnail should be cropped to a square
 				'images': [],			// An array of image objects or src strings (not recommended).
 				'thumbnails': [],		// An array of src strings to thumbnails for image src strings
-										// If used, the 0th thumbnail maps to the first image that is a string,
-										// even if it is not the 0th element (not recommended for use).
-				'format': {				// Properties relating to the formatting of the album
+								// If used, the 0th thumbnail maps to the first image that is a string,
+								// even if it is not the 0th element (not recommended for use).
+				'format': {			// Properties relating to the formatting of the album
 					'colSpace': '0.5em',
 					'rowSpace': '0.5em',
 					'rowClass': '',
 					'imgClass': '',
 					'aClass': ''
 				},
-				'complete': complete,   // Callback for when pJS has added the album to $this
-				'load': ''				// Callback for when all preloaded photos are done loading
+				'complete': complete,		// Callback for when pJS has added the album to $this
+				'load': ''			// Callback for when all preloaded photos are done loading
 			}, settings);
 			return this.each( function() {
 				var $this = $( this ),
@@ -284,7 +284,7 @@
 						// Make sure everything runs smoothly
 						// in browsers like Firefox.
 						if ( root.apiResponse === undefined ) {
-							eval(response); // TODO: This is a terrible hack. Find a better way.
+							eval( response ); // TODO: This is a terrible hack. Find a better way.
 						}
 						var feed = apiResponse.feed;
 						data.api = {
