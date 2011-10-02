@@ -13,7 +13,7 @@ root = exports ? this # Bind "root" to the global namespace, or the exports name
 
 root.evalResponse = ( json ) ->
 	# Make sure the JSON is actually parsed
-	root.apiResponse = $.parseJSON response if typeof json is 'string'
+	root.apiResponse = $.parseJSON json if typeof json is 'string'
 
 methods =
 	init: ( settings, complete ) ->
@@ -221,7 +221,7 @@ methods =
 				success: ( response ) ->
 					# Make sure the response has been evaluated
 					eval( response ) if not root.apiResponse?
-					feed = apiResponse.feed
+					feed = root.apiResponse.feed
 					data.api =
 						query: apiString
 						response: response
