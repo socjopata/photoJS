@@ -15,7 +15,7 @@
 		}
 		apiResponse = json;
 		return json;
-	}
+	};
 	var methods = {
 		init: function( settings, complete ) {
 			// Recursively extend the default settings
@@ -109,10 +109,7 @@
 						rows = Math.ceil( data.album.images.length / columns );
 		
 						for ( var row = 0; row < rows; ++row ) {
-								var rowDiv = $( '<div/>' )
-									.addClass( 'pJSRow' )
-									.addClass( data.settings['format']['rowClass'] )
-									.appendTo( albumDiv );
+								var rowDiv = $( '<div/>' ).addClass( 'pJSRow' ).addClass( data.settings['format']['rowClass'] ).appendTo( albumDiv );
 									
 								if ( row != rows - 1 ) {
 									rowDiv.css( 'margin-bottom', data.settings['format']['rowSpace'] );
@@ -121,19 +118,11 @@
 							for ( var col = 0; col < columns; ++col ) {
 								if ( i < data.album.images.length ) {
 									var entry = data.album.images[i],
-										anchor = $( '<a/>' )
-											.attr( 'href', entry.src )
-											.addClass( data.settings['format']['aClass'] )
-											.appendTo( rowDiv )
-									$( '<img/>' )
-										.attr( 'title', entry.title )
-										.attr( 'src', entry.thumbnail )
-										.addClass( data.settings['format']['imgClass'] )
-										.css( 'vertical-align', 'bottom' ) // Make sure the image is aligned properly
-										.appendTo( anchor );
+										anchor = $( '<a/>' ).attr( 'href', entry.src ).addClass( data.settings['format']['aClass'] ).appendTo( rowDiv );
+									$( '<img/>' ).attr( 'title', entry.title ).attr( 'src', entry.thumbnail ).addClass( data.settings['format']['imgClass'] ).css( 'vertical-align', 'bottom' ).appendTo( anchor );
 										
 									if ( col != columns - 1 ) {
-										anchor.css( 'margin-right', data.settings['format']['colSpace'] )
+										anchor.css( 'margin-right', data.settings['format']['colSpace'] );
 									}
 									++i;
 								} else {
@@ -184,7 +173,7 @@
 					$this.pJS( 'load', thumbs );
 				} else if ( images === 'images' ) {
 					// Load images
-					var images = [];
+					images = [];
 					$.each( data.settings['images'].concat( data.album['images'] ), function( index, value ) {
 						if ( typeof value === 'string' ) {
 							images.push( value );
@@ -194,7 +183,7 @@
 					});
 					$this.pJS( 'load', images );
 				} else if ( images === 'both' || images === 'all' ) {
-					var images = [];
+					images = [];
 					if ( data.settings['thumbnails'].length > 0 ) {
 						images = images.concat( data.settings['thumbnails'] );
 					}
@@ -210,7 +199,7 @@
 							images.push( value );
 						}
 					});
-					$this.pJS( 'load', images )
+					$this.pJS( 'load', images );
 				} else if ( $.isArray( images ) ) {
 					// Load images from array
 					var imagesLoaded = 0;
@@ -263,13 +252,7 @@
 			return this.each( function() {
 				var $this = $( this ),
 					data = $this.data( 'pJS' ),
-					apiString = ( data.settings['SSL'] ? 'https://' : 'http://' )
-						+ 'picasaweb.google.com/data/feed/base/'
-						+ 'user/'
-						+ data.settings['user']
-						+ '/albumid/'
-						+ data.settings['id']
-						+ '?';
+					apiString = ( data.settings['SSL'] ? 'https://' : 'http://' ) + 'picasaweb.google.com/data/feed/base/user/' + data.settings['user'] + '/albumid/' + data.settings['id'] + '?';
 				$.ajax({
 					url: apiString,
 					datatype: 'script',
