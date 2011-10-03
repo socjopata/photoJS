@@ -86,14 +86,14 @@ methods =
 					if columns == 'auto' then columns = Math.ceil Math.sqrt data.album.images.length else columns ||= 4
 					rows = Math.ceil data.album.images.length / columns
 
-					for row in [0..rows]
+					for row in [1..rows]
 						rowDiv = $( '<div/>' )
 							.addClass( 'pJSRow' )
 							.addClass( data.settings['format']['rowClass'] )
 							.appendTo( albumDiv );
-						rowDiv.css( 'margin-bottom', data.settings['format']['rowSpace'] ) if row isnt rows - 1
+						rowDiv.css( 'margin-bottom', data.settings['format']['rowSpace'] ) if row isnt rows
 
-						for col in [0..columns]
+						for col in [1..columns]
 							if i < data.album.images.length
 								entry = data.album.images[i]
 								anchor = $( '<a/>' )
@@ -107,7 +107,7 @@ methods =
 											.css( 'vertical-align', 'bottom' )
 									)
 
-								anchor.css( 'margin-right', data.settings['format']['colSpace'] ) if col isnt columns - 1
+								anchor.css( 'margin-right', data.settings['format']['colSpace'] ) if col isnt columns
 								++i
 							else break
 
