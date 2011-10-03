@@ -12,8 +12,7 @@ $ = jQuery
 root = exports ? this # Bind "root" to the global namespace, or the exports namespace under Node.JS
 
 root.evalResponse = ( json ) ->
-	# Make sure the JSON is actually parsed
-	root.apiResponse = $.parseJSON json if typeof json is 'string'
+	root.apiResponse = json
 
 methods =
 	init: ( settings, complete ) ->
@@ -78,8 +77,7 @@ methods =
 						# Start loading any images that need to be preloaded
 						$this.pJS 'load', data.settings['preload'] if data.settings['preload']?
 					else
-						# TODO: Fail more gracefully
-						$.error "Loading data from Picasa Web Albums failed with status: \"#{textStatus}.\""
+						$.error "Loading data from Picasa Web Albums failed with status: #{textStatus}."
 					# Create the actual album and add it to $this
 					albumDiv = data.album.albumDiv
 					columns = data.settings.columns
@@ -210,18 +208,19 @@ methods =
 			data = $this.data 'pJS'
 			apiString = ( if data.settings['SSL'] then 'https://' else 'http://' ) + "picasaweb.google.com/data/feed/base/user/#{data.settings['user']}/albumid/#{data.settings['id']}?"
 			$.ajax
-				url: apiString,
-				datatype: 'script'
+				type: 'GET'
+				cache: false
+				url: apiString
+				dataType: 'jsonp'
+				jsonp: 'callback'
+				jsonpCallback: 'evalResponse'
 				data:
 					alt: 'json-in-script'
-					callback: 'evalResponse'
 					kind: 'photo'
 					imgmax: data.settings['imgmax']
 					thumbsize: data.settings['thumbmax'] + ( if data.settings['cropped'] then 'c' else 'u' )
 				success: ( response ) ->
-					# Make sure the response has been evaluated
-					eval( response ) if not root.apiResponse?
-					feed = root.apiResponse.feed
+					feed = response.feed
 					data.api =
 						query: apiString
 						response: response
@@ -230,7 +229,7 @@ methods =
 					data.album.title = feed.title.$t
 					data.album.subtitle = feed.subtitle.$t
 					data.album.updated = new Date feed.updated.$t
-					$each feed.entry, ( index, value ) ->
+					$.each feed.entry, ( index, value ) ->
 						data.album.images.push
 							src: value.content.src
 							type: value.content.type
