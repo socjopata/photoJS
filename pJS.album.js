@@ -9,10 +9,6 @@
  */
 (function( $, root, undefined ) {
 	evalResponse = function ( json ) {
-		// Make sure the JSON is actually parsed
-		if ( typeof json === "string" ) {
-			json = $.parseJSON( json );
-		}
 		apiResponse = json;
 		return json;
 	};
@@ -21,27 +17,25 @@
 			// Recursively extend the default settings
 			// object with any user defined settings.
 			settings = $.extend( true, {
-				'api': 'none',			// Only supports 'picasa' or 'none' right now
-				'preload': 'thumbs',		// 'thumbs,' 'images,' 'all,' or 'none.' Loads asynchronously.
-				'columns': 4,			// Integer, or 'auto' to calculate based on number of photos
-				'id': '',			// The API id of the album to download
-				'user': '',			// The username to feed the API
-				'imgmax': '512',		// The longest edge length of the image to download
-				'thumbmax': '104',		// The longest edge of the thumbnail image
-				'cropped': true,		// True if the thumbnail should be cropped to a square
-				'images': [],			// An array of image objects or src strings (not recommended).
-				'thumbnails': [],		// An array of src strings to thumbnails for image src strings
-								// If used, the 0th thumbnail maps to the first image that is a string,
-								// even if it is not the 0th element (not recommended for use).
-				'format': {			// Properties relating to the formatting of the album
+				'api': 'none',
+				'preload': 'thumbs',
+				'columns': 4,
+				'id': '',
+				'user': '',
+				'imgmax': '512',
+				'thumbmax': '104',
+				'cropped': true,
+				'images': [],
+				'thumbnails': [],
+				'format': {
 					'colSpace': '0.5em',
 					'rowSpace': '0.5em',
 					'rowClass': '',
 					'imgClass': '',
 					'aClass': ''
 				},
-				'complete': complete,		// Callback for when pJS has added the album to $this
-				'load': ''			// Callback for when all preloaded photos are done loading
+				'complete': complete,
+				'load': ''
 			}, settings);
 			return this.each( function() {
 				var $this = $( this ),
@@ -218,7 +212,6 @@
 			return this.each( function() {
 				var $this = $( this ),
 					data = $this.data( 'pJS' );
-				// TODO: Add a default image
 				if ( data.settings.images.length > 0 ) {
 					var dt = new Date(),
 						stringCount = 0;
@@ -254,21 +247,19 @@
 					data = $this.data( 'pJS' ),
 					apiString = ( data.settings['SSL'] ? 'https://' : 'http://' ) + 'picasaweb.google.com/data/feed/base/user/' + data.settings['user'] + '/albumid/' + data.settings['id'] + '?';
 				$.ajax({
+					type: 'GET',
+					cache: false,
 					url: apiString,
-					datatype: 'script',
+					dataType: 'jsonp',
+					jsonp: 'callback',
+					jsonpCallback: 'evalResponse',
 					data: {
 						alt: 'json-in-script',
-						callback: 'evalResponse',
 						kind: 'photo',
 						imgmax: data.settings['imgmax'],
 						thumbsize: data.settings['thumbmax'] + ( data.settings['cropped'] ? 'c' : 'u' )
 					},
 					success: function( response ) {
-						// Make sure everything runs smoothly
-						// in browsers like Firefox.
-						if ( root.apiResponse === undefined ) {
-							eval( response ); // TODO: This is a terrible hack. Find a better way.
-						}
 						var feed = apiResponse.feed;
 						data.api = {
 							query: apiString,
